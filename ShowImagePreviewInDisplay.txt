@@ -1,0 +1,32 @@
+ <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddEmployee.aspx.cs" Inherits="ShubraSystemInventory.AddEmployee" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <script src="Scripts/jquery-3.1.1.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+ <script type="text/javascript">
+        function showpreview(img) {
+
+            if (img.files && img.files[0]) {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#Image2').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(img.files[0]);
+            }
+        }
+
+    </script>
+</head>	
+	
+	<body>
+	<asp:Image ID="Image2" runat="server" Height="200" Width="200" />
+                        <br />
+                        <asp:FileUpload onchange="showpreview(this)" ID="FileUpload2" runat="server" />
+	</body>
+	</html>
