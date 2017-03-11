@@ -1,0 +1,84 @@
+Sql DataBase
+================
+CREATE TABLE tblUser 
+(
+	UserID INT PRIMARY KEY IDENTITY NOT NULL,
+	UserName VARCHAR(50),
+	UserEmail VARCHAR(50),
+	UserPassword VARCHAR(MAX) NOT NULL
+);
+GO
+
+Design View 
+================
+ <div>
+    
+        <table class="auto-style1">
+            <tr>
+                <td class="auto-style2">Email</td>
+                <td>
+                    <asp:TextBox ID="txtEmail" runat="server"></asp:TextBox>
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style2">&nbsp;</td>
+                <td>
+                    <asp:Button ID="btnSend" runat="server" Text="Send Password" OnClick="btnSend_Click" />
+                </td>
+            </tr>
+            <tr>
+                <td class="auto-style2">&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="auto-style2">&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="auto-style2">&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+        <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+    </div>
+
+Code Behind 
+=============
+
+    protected void btnSend_Click(object sender, EventArgs e)
+    {
+        SqlConnection con = new SqlConnection(cs);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("Select * From tblUser where UserEmail='" + txtEmail.Text + "'", con);
+        SqlDataAdapter sdp = new SqlDataAdapter(cmd);
+        DataTable dt = new DataTable();
+        sdp.Fill(dt);
+        if (dt.Rows.Count==0)
+        {
+            Label1.Text = "your email is wrong.";
+        }
+        else { 
+          
+        string userName = dt.Rows[0][1].ToString();
+        string password = dt.Rows[0][3].ToString();
+        Session["userName"] = userName;
+          
+        cmd.ExecuteNonQuery();
+        cmd.Dispose();
+        con.Close();
+        MailMessage mailMessage = new MailMessage("sender Email", txtEmail.Text);
+        System.Net.NetworkCredential mailAuthenticaion = new System.Net.NetworkCredential("sender Email", "password");
+            StringBuilder strbody = new StringBuilder();
+            strbody.Append("Hello " + " " + userName + "." + "Your password is " + password);
+            mailMessage.Subject = "Recover Password";
+            mailMessage.Body = strbody.ToString();
+
+        SmtpClient smtpclient = new SmtpClient("smtp.gmail.com", 587);
+        smtpclient.EnableSsl = true;
+        smtpclient.Credentials = mailAuthenticaion;
+        mailMessage.IsBodyHtml = true;
+
+        smtpclient.Send(mailMessage);
+        Label1.Text = "your password send to your email.";
+        }
+    }
