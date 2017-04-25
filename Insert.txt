@@ -1,0 +1,41 @@
+ void showData()
+    {
+        SqlConnection con = new SqlConnection(cs);
+        SqlCommand cmd = new SqlCommand("Select * From DepartmentInfo", con);
+        con.Open();
+        SqlDataAdapter sda = new SqlDataAdapter(cmd);
+        DataTable dt = new DataTable();
+        sda.Fill(dt);
+        GridView1.DataSource = dt;
+        GridView1.DataBind();
+    }
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        SqlConnection con = new SqlConnection(cs);
+        SqlCommand cmd = new SqlCommand("Insert into DepartmentInfo(deptId,deptName) values(@deptId,@deptName)", con);
+        con.Open();
+        cmd.Parameters.AddWithValue("@deptId", txtDeptId.Text);
+        cmd.Parameters.AddWithValue("@deptName", txtDeptName.Text);
+        cmd.ExecuteNonQuery();
+        con.Close();
+        txtDeptName.Text = "";
+        showData();
+    }
+
+    protected void btnUpdate_Click(object sender, EventArgs e)
+    {
+        SqlConnection con = new SqlConnection(cs);
+        SqlCommand cmd = new SqlCommand("Update into DepartmentInfo(deptId,deptName) values(@deptId,@deptName)", con);
+        con.Open();
+        cmd.Parameters.AddWithValue("@deptId", txtDeptId.Text);
+        cmd.Parameters.AddWithValue("@deptName", txtDeptName.Text);
+        cmd.ExecuteNonQuery();
+        con.Close();
+        txtDeptName.Text = "";
+        showData();
+    }
