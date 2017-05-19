@@ -1,0 +1,185 @@
+ <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False"  ShowFooter="true" CellPadding="4" DataKeyNames="Id"  ForeColor="#333333" GridLines="None" OnRowEditing="GridView1_RowEditing" OnRowCancelingEdit="GridView1_RowCancelingEdit" OnRowDeleting="GridView1_RowDeleting" OnRowUpdating="GridView1_RowUpdating" >
+            <AlternatingRowStyle BackColor="White" />
+            <Columns>
+                <asp:TemplateField HeaderText="Sl No.">
+                    <FooterTemplate>
+                        <asp:Button ID="Button5" runat="server" ValidationGroup="Insert"  Text="Insert" OnClick="Button5_Click" />
+                    </FooterTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label5" runat="server" Text="<%# Container.DataItemIndex+1 %>"></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Id" Visible="false" InsertVisible="False" SortExpression="Id">
+                    <EditItemTemplate>
+                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("Id") %>'></asp:Label>
+                    
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("Id") %>'></asp:Label>
+                    
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Name" SortExpression="Name">
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("Name") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <FooterTemplate>
+                        <asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfname" 
+                            runat="server" ErrorMessage="Name Field required" Text="*" ControlToValidate="TextBox4" ValidationGroup="Insert">
+
+                        </asp:RequiredFieldValidator>
+                    </FooterTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label2" runat="server" Text='<%# Bind("Name") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Gender" SortExpression="Gender">
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("Gender") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <FooterTemplate>
+                        <asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfgender" 
+                            runat="server" ErrorMessage="Gender Field required" Text="*" ControlToValidate="TextBox5" ValidationGroup="Insert">
+
+                        </asp:RequiredFieldValidator>
+                    </FooterTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("Gender") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="City" SortExpression="City">
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("City") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <FooterTemplate>
+                        <asp:TextBox ID="TextBox6" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfcity" 
+                            runat="server" ErrorMessage="City Field required"  Text="*" ControlToValidate="TextBox6" ValidationGroup="Insert">
+
+                        </asp:RequiredFieldValidator>
+                    </FooterTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label4" runat="server" Text='<%# Bind("City") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField>
+                    <EditItemTemplate>
+                        <asp:Button ID="Button3" runat="server" CommandName="Update" Text="Update" />
+                        <asp:Button ID="Button4" runat="server" Text="Cancel" CommandName="Cancel" />
+                    
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Button ID="Button1" runat="server" CommandName="Edit" Text="Edit" />
+                        <asp:Button ID="Button2" runat="server" CommandName="Delete" Text="Delete" />
+                    
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </Columns>
+            <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
+            <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="#FFCC66" ForeColor="#333333" HorizontalAlign="Center" />
+            <RowStyle BackColor="#FFFBD6" ForeColor="#333333" />
+            <SelectedRowStyle BackColor="#FFCC66" Font-Bold="True" ForeColor="Navy" />
+            <SortedAscendingCellStyle BackColor="#FDF5AC" />
+            <SortedAscendingHeaderStyle BackColor="#4D0000" />
+            <SortedDescendingCellStyle BackColor="#FCF6C0" />
+            <SortedDescendingHeaderStyle BackColor="#820000" />
+        </asp:GridView>
+        <asp:ValidationSummary ID="ValidationSummary1" ValidationGroup="Insert" runat="server" />
+
+=============
+
+
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class Default2 : System.Web.UI.Page
+{
+    string cs = ConfigurationManager.ConnectionStrings["PracticeConnectionString"].ConnectionString;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            showdata();
+        }
+    }
+    void showdata()
+    {
+        SqlConnection con = new SqlConnection(cs);
+        SqlCommand cmd = new SqlCommand("Select * From Employee", con);
+        SqlDataAdapter dap = new SqlDataAdapter(cmd);
+        DataTable dt = new DataTable();
+        dap.Fill(dt);
+        GridView1.DataSource = dt;
+        GridView1.DataBind();
+    }
+
+    protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
+    {
+        GridView1.EditIndex = e.NewEditIndex;
+        showdata();
+    }
+
+    protected void GridView1_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+    {
+        GridView1.EditIndex = -1;
+        showdata();
+    }
+
+    protected void Button5_Click(object sender, EventArgs e)
+    {
+        string name = ((TextBox)GridView1.FooterRow.FindControl("TextBox4")).Text;
+        string gender = ((TextBox)GridView1.FooterRow.FindControl("TextBox5")).Text;
+        string city = ((TextBox)GridView1.FooterRow.FindControl("TextBox6")).Text;
+        SqlConnection con = new SqlConnection(cs);
+        SqlCommand cmd = new SqlCommand("Insert Into Employee values(@name,@gender,@city)", con);
+        cmd.Parameters.AddWithValue("@name", name);
+        cmd.Parameters.AddWithValue("@gender", gender);
+        cmd.Parameters.AddWithValue("@city", city);
+        con.Open();
+        cmd.ExecuteNonQuery();
+        con.Close();
+        showdata();
+
+    }
+
+    protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
+    {
+        var lblid = GridView1.DataKeys[e.RowIndex].Values[0];
+        SqlConnection con = new SqlConnection(cs);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("Delete From Employee Where Id ='"+lblid+"'", con);
+        cmd.ExecuteNonQuery();
+        showdata();
+    }
+
+
+
+    protected void GridView1_RowUpdating(object sender, GridViewUpdateEventArgs e)
+    {
+        var lblid = GridView1.DataKeys[e.RowIndex].Values[0];
+        GridViewRow row = GridView1.Rows[e.RowIndex];
+        string name = (row.FindControl("TextBox1") as TextBox).Text;
+        string gender = (row.FindControl("TextBox2") as TextBox).Text;
+        string city = (row.FindControl("TextBox3") as TextBox).Text;
+
+        SqlConnection con = new SqlConnection(cs);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("Update Employee Set Name=@name,Gender=@gender,City=@city Where Id ='" + lblid + "'", con);
+        cmd.Parameters.AddWithValue("@name", name);
+        cmd.Parameters.AddWithValue("@gender", gender);
+        cmd.Parameters.AddWithValue("@city",city);
+        cmd.ExecuteNonQuery();
+        GridView1.EditIndex = -1;
+        showdata();
+    }
+}
