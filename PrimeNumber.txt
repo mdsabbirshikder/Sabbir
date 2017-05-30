@@ -1,0 +1,40 @@
+for (int i = 1; i <= 100; i++)
+            {
+                bool current = true;
+                for (int J = 2; J <= i - 1; J++)
+                {
+                    if (i % J == 0)
+                    {
+                        current = false;
+                        break;
+                    }
+
+                }
+                if (current == true)
+                {
+                    Console.WriteLine("Prime Number is {0}", i);
+                }
+            }
+A to Z 
+
+            for (char alphabet = 'a'; alphabet <= 'z'; alphabet++)
+            {
+                Console.Write(alphabet + " ");
+            }
+            Console.ReadLine();
+-----------------------------
+*
+**
+***
+****
+*****
+for (int i = 0; i <= 5; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    Console.Write("*");
+                }
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+
