@@ -1,0 +1,11 @@
+SqlConnection con = new SqlConnection(cs);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("Select * From Department", con);
+        SqlDataAdapter dap = new SqlDataAdapter(cmd);
+        DataTable dt = new DataTable();
+        dap.Fill(dt);
+        ddlDepartment.DataSource = dt;
+        ddlDepartment.DataTextField = "DepartmentName";
+        ddlDepartment.DataValueField = "DepartmentId";
+        ddlDepartment.DataBind();
+        ddlDepartment.Items.Insert(0, new ListItem("Selece Semester Name", "0"));
